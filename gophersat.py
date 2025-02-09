@@ -1,0 +1,1 @@
+# TODO: functions that translate the list of constaints into a cnf file and interpret the gophersat output 
