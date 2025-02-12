@@ -2,15 +2,15 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.animation as animation
 from itertools import product
+from typing import Callable
 
-
-def create_snake_path(solution, T, N, M, pommes=None, pommes_counter=None):
+def create_snake_path(solution, T, N, variable:Callable, pommes=None, pommes_counter=None):
     snake_path = []
     snake_len = 3
     pommes_mangees = 0
     for t in range(T):
         for x, y in product(range(N), range(N)):
-            if M[(x, y, t)] in solution:
+            if variable((x, y, t),typ='s') in solution:
                 if t == 0:
                     snake_path.append([(x, y)])
                 else:
