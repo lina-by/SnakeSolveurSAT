@@ -13,9 +13,9 @@ def create_variable_index(N: int, T: int, nb_pommes: int = 0) -> Callable:
         (p, t): N**2 * T + p * T + t + 1 for p in range(nb_pommes) for t in range(T)
     }
     index_counter = {
-        (c, t): N**2 * T + nb_pommes * T + c * T + t + 1
+        (c, t): N**2 * T + nb_pommes * T + c * (T + 1) + t + 1
         for c in range(nb_pommes)
-        for t in range(T)
+        for t in range(T + 1)
     }
 
     def variable(id, typ: str = "s"):
@@ -55,7 +55,7 @@ def create_variable_index(N: int, T: int, nb_pommes: int = 0) -> Callable:
                 )
             if id[0] >= nb_pommes:
                 raise ValueError("Counter index is over the limit")
-            if id[1] >= T:
+            if id[1] >= T + 1:
                 raise ValueError("Time index is over the limit")
             return index_counter[(id[0], id[1])]
 
@@ -74,7 +74,11 @@ def format_clause(litteraux: list[int]):
     return clause
 
 
-def create_sat(N_variables, clauses):
+def create_sat(clauses):
+    N_variables = 0
+    for clause in clauses:
+        N_variables = max(N_variables, max([abs(int(x)) for x in clause.split()]))
+
     with open("./table.cnf", "w") as f:
         f.write(f"p cnf {N_variables} {len(clauses)}\n")
 

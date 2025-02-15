@@ -4,18 +4,26 @@ import matplotlib.animation as animation
 from itertools import product
 from typing import Callable
 
-def create_snake_path(solution, T, N, variable:Callable, pommes=None, pommes_counter=None):
+
+def create_snake_path(solution, T, N, variable: Callable, pommes=None):
     snake_path = []
     snake_len = 3
     pommes_mangees = 0
     for t in range(T):
         for x, y in product(range(N), range(N)):
-            if variable((x, y, t),typ='s') in solution:
+            if variable((x, y, t), typ="s") in solution:
                 if t == 0:
                     snake_path.append([(x, y)])
                 else:
                     if pommes:
-                        if pommes_counter[pommes_mangees + 1, t] in solution:
+                        if (
+                            t > snake_len
+                            and variable(
+                                (pommes_mangees, t - snake_len - pommes_mangees + 1),
+                                "c",
+                            )
+                            in solution
+                        ):
                             pommes_mangees += 1
 
                     new_position = [(x, y)] + snake_path[-1]
@@ -99,7 +107,7 @@ def visualize_snake(
             del apple_dict[head_pos]
 
     anim = animation.FuncAnimation(
-        fig, update, frames=len(snake_path), interval=200, repeat=True
+        fig, update, frames=len(snake_path), interval=1000, repeat=True
     )
     anim.save(animation_name)
     return anim
