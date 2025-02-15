@@ -4,19 +4,21 @@ import matplotlib.animation as animation
 from itertools import product
 from typing import Callable
 
-def create_snake_path(solution, T, N, variable:Callable, pommes=None, pommes_counter=None):
+def create_snake_path(solution, T, N, variable:Callable, pommes=None):
     snake_path = []
     snake_len = 3
     pommes_mangees = 0
+    nb_pommes = 0 if pommes is None else len(pommes)
     for t in range(T):
         for x, y in product(range(N), range(N)):
             if variable((x, y, t),typ='s') in solution:
                 if t == 0:
                     snake_path.append([(x, y)])
                 else:
-                    if pommes:
-                        if pommes_counter[pommes_mangees + 1, t] in solution:
-                            pommes_mangees += 1
+                    if pommes and t>snake_len:
+                        nb_pommes_actives = [1 for pomme_id in range(nb_pommes)
+                                             if variable(typ='p', id=(pomme_id, t-snake_len-pommes_mangees+1)) in solution]
+                        pommes_mangees = nb_pommes - sum(nb_pommes_actives)
 
                     new_position = [(x, y)] + snake_path[-1]
                     snake_path.append(new_position[: snake_len + pommes_mangees])
@@ -89,8 +91,12 @@ def visualize_snake(
             patch.remove()
 
         # Update snake segments
-        for patch, pos in zip(snake_patches, current_snake):
+        for i, (patch, pos) in enumerate(zip(snake_patches, current_snake)):
             patch.set_xy(pos)
+            if i == 0:
+                patch.set_facecolor("yellow")  # Head of the snake
+            else:
+                patch.set_facecolor("#61dafb")  # Body of the snake
 
         # Remove apples if eaten
         head_pos = current_snake[0]
@@ -99,7 +105,7 @@ def visualize_snake(
             del apple_dict[head_pos]
 
     anim = animation.FuncAnimation(
-        fig, update, frames=len(snake_path), interval=200, repeat=True
+        fig, update, frames=len(snake_path), interval=2000, repeat=True
     )
     anim.save(animation_name)
     return anim
@@ -120,3 +126,4 @@ if __name__ == "__main__":
     apple_positions = [(2, 5), (3, 2), (5, 7)]
 
     visualize_snake(grid_size, snake_path, apple_positions)
+2

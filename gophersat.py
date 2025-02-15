@@ -1,7 +1,7 @@
 # TODO: functions that translate the list of constaints into a cnf file and interpret the gophersat output
 import os
-from itertools import combinations, product
-from typing import Tuple, Callable
+from itertools import product
+from typing import Callable
 
 
 def create_variable_index(N: int, T: int, nb_pommes: int = 0) -> Callable:
