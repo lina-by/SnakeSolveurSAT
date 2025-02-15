@@ -11,7 +11,7 @@ def create_snake_path(solution, T, N, variable:Callable, pommes=None):
     nb_pommes = 0 if pommes is None else len(pommes)
     for t in range(T):
         for x, y in product(range(N), range(N)):
-            if variable((x, y, t),typ='s') in solution:
+            if variable((x, y, t), typ="s") in solution:
                 if t == 0:
                     snake_path.append([(x, y)])
                 else:
