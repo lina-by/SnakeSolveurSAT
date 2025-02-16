@@ -40,6 +40,7 @@ def visualize_snake(
     animation_name="solution_animation.gif",
     apple_positions=[],
     pommes_successives=False,
+    interval=300,
 ):
     fig, ax = plt.subplots()
     ax.set_xlim(0, grid_size)
@@ -137,12 +138,11 @@ def visualize_snake(
                 ax.add_patch(apple)
 
     anim = animation.FuncAnimation(
-        fig, update, frames=len(snake_path), interval=300, repeat=True
+        fig, update, frames=len(snake_path), interval=interval, repeat=True
     )
 
     anim.save(animation_name)
     return anim
-
 
 
 if __name__ == "__main__":

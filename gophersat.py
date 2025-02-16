@@ -10,10 +10,12 @@ def create_variable_index(N: int, T: int, nb_pommes: int = 0) -> Callable:
         for x, y, t in product(range(N), range(N), range(T))
     }
     index_pommes = {
-        (p, t): N**2 * T + p * T + t + 1 for p in range(nb_pommes) for t in range(T)
+        (p, t): len(index_position) + p * (T + 1) + t + 1
+        for p in range(nb_pommes)
+        for t in range(T + 1)
     }
     index_counter = {
-        (c, t): N**2 * T + nb_pommes * T + c * (T + 1) + t + 1
+        (c, t): len(index_position) + len(index_pommes) + c * (T + 1) + t + 1
         for c in range(nb_pommes)
         for t in range(T + 1)
     }
@@ -44,7 +46,7 @@ def create_variable_index(N: int, T: int, nb_pommes: int = 0) -> Callable:
                 )
             if id[0] >= nb_pommes:
                 raise ValueError("Apple index is over the limit")
-            if id[1] >= T:
+            if id[1] >= T + 1:
                 raise ValueError("Time index is over the limit")
             return index_pommes[(id[0], id[1])]
 
