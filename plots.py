@@ -27,7 +27,7 @@ def create_snake_path(solution, T, N, variable:Callable, pommes=None):
 
 
 def visualize_snake(
-    grid_size, snake_path, animation_name="solution_animation.gif", apple_positions=[]
+    grid_size, snake_path, animation_name="solution_animation.gif", apple_positions=[], interval=400,
 ):
     fig, ax = plt.subplots()
     ax.set_xlim(0, grid_size)
@@ -105,10 +105,11 @@ def visualize_snake(
             del apple_dict[head_pos]
 
     anim = animation.FuncAnimation(
-        fig, update, frames=len(snake_path), interval=2000, repeat=True
+        fig, update, frames=len(snake_path), interval=interval, repeat=True
     )
     anim.save(animation_name)
     return anim
+
 
 
 if __name__ == "__main__":
