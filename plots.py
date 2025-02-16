@@ -144,6 +144,7 @@ def visualize_snake(
     return anim
 
 
+
 if __name__ == "__main__":
     # Exemple d'utilisation
     grid_size = 10
